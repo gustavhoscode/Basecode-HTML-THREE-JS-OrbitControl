@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="main.css" />
+  </head>
+  <body>
+    	<div id="info">
+			<a href="https://github.com/gustavhoscode" target="_blank" rel="noopener">Grupo C</a> GLTFLoader em THREE JS<br />
+		Casa Bertolini por 
+			<a href="hhttps://www.archdaily.com.br/br/01-17352/casa-bertolini-studioparalelo-mais-maam" target="_blank" rel="noopener">Studioparalelo + MAAM</a>
+		</div>
+    <script src="three.min.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script src="GLTFLoader.js"></script>
+    <script src="RGBELoader.js"></script>
+    <script>
+      let scene, camera, renderer, controls;
+
+      function init() {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xdddddd);
+
+        camera = new THREE.PerspectiveCamera(
+          90,
+          window.innerWidth / window.innerHeight,
+          1,
+          5000
+        );
+        camera.position.x = 300;
+        camera.position.y = 100;
+        camera.position.z = 250;
+
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        let loader = new THREE.GLTFLoader();
+        loader.load(
+          "https://raw.githubusercontent.com/gustavhoscode/Casa-Bertolini-Three-Js/master/Model.gltf",
+          function(gltf) {
+            let mesh = gltf.scene.children[0];
+            mesh.scale.set(100, 100, 100);
+            scene.add(gltf.scene);
+            animate();
+          }
+        );
+
+        controls = new THREE.OrbitControls(camera);
+        controls.addEventListener("change", renderer);
+
+        let light1 = new THREE.PointLight(0xffffff, 1);
+        light1.position.set(0, 1200, 500);
+        scene.add(light1);
+
+        let directionalLight = new THREE.DirectionaLlight(0xffffff, 1);
+        directionalLight.position.set(0, 1, 0);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
+      }
+      function animate() {
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      }
+      init();
+    </script>
+  </body>
+</html>
+
+
